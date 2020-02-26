@@ -20,12 +20,12 @@ tamanho = 10
 temporizador = pygame.time.Clock()
 fundo = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Snake")
-fonte = pygame.font.SysFont(None, 15, bold=True)
+fonte = pygame.font.SysFont(None, 25, bold=True)
 
 
 def texo(mensagem, cordotexto):
     texto1 = fonte.render(mensagem, True, cordotexto)
-    fundo.blit(texto1, [largura/2, altura/2])
+    fundo.blit(texto1, [largura/10, altura/2])
 
 
 def cobra(cobraXY):
@@ -53,7 +53,7 @@ def jogo():
     while sair:
         while fimdejogo:
             fundo.fill(branco)
-            texo("Game Over \nTecle C para continuar \nTecle S para sair", verde)
+            texo("Game Over, Tecle C para continuar ou Tecle S para sair", verde)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -127,9 +127,10 @@ def jogo():
     #    if posicaocobra_y < 0:
     #        sair = False
 
-    """/ Caso queira que o jogo feche a ou inves de atravessar
+    """/ Caso queira que o jogo finalize au inves de atravessar
     a tela de um lado para o outro quando o personagem tocar
-    uma das bordas utilise os IF comentados acima"""
+    uma das bordas utilise os IF comentados acima, usando essa opção 
+    troque sair = False por fimdejogo = True para finalizar"""
 
 
 jogo()
