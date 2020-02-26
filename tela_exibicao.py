@@ -20,6 +20,12 @@ tamanho = 10
 temporizador = pygame.time.Clock()
 fundo = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Snake")
+fonte = pygame.font.SysFont(None, 15, bold=True)
+
+
+def texo(mensagem, cordotexto):
+    texto1 = fonte.render(mensagem, True, cordotexto)
+    fundo.blit(texto1, [largura/2, altura/2])
 
 
 def cobra(cobraXY):
@@ -34,6 +40,7 @@ def aple(posicaocobra_x, posicaocobra_y):
 
 def jogo():
     sair = True
+    fimdejogo = False
     posicaocobra_x = randint(0, (largura - tamanho)/10)*10
     posicaocobra_y = randint(0, (altura - tamanho)/10)*10
     posicaoaple_x = randint(0, (altura - tamanho)/10)*10
@@ -44,6 +51,21 @@ def jogo():
     comprimenrodacobra = 1
 
     while sair:
+        while fimdejogo:
+            fundo.fill(branco)
+            texo("Game Over \nTecle C para continuar \nTecle S para sair", verde)
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sair = False
+                    fimdejogo = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        jogo()
+                    if event.key == pygame.K_s:
+                        sair = False
+                        fimdejogo = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sair = False
@@ -64,13 +86,14 @@ def jogo():
         posicaocobra_x += velocidade_x
         posicaocobra_y += velocidade_y
 
-        
         cobrainicio = []
         cobrainicio.append(posicaocobra_x)
         cobrainicio.append(posicaocobra_y)
         cobraXY.append(cobrainicio)
         if len(cobraXY) > comprimenrodacobra:
             del cobraXY[0]
+        if any(Bloco == cobrainicio for Bloco in cobraXY[:-1]):
+            fimdejogo = True
 
         cobra(cobraXY)
         """/aqui é quando a cobra come a maçan, no caso quando os dois objetos
