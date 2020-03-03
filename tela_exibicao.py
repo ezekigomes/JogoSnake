@@ -16,16 +16,17 @@ except print:
 largura = 640
 altura = 480
 tamanho = 10
+placar = 40
 
 temporizador = pygame.time.Clock()
 fundo = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption("Snake")
-fonte = pygame.font.SysFont(None, 25, bold=True)
 
 
-def texo(mensagem, cordotexto):
+def texo(mensagem, cordotexto, tamtexto, x, y):
+    fonte = pygame.font.SysFont(None, tamtexto, bold=True)
     texto1 = fonte.render(mensagem, True, cordotexto)
-    fundo.blit(texto1, [largura/10, altura/2])
+    fundo.blit(texto1, [x, y])
 
 
 def cobra(cobraXY):
@@ -42,20 +43,22 @@ def jogo():
     sair = True
     fimdejogo = False
     posicaocobra_x = randrange(0, largura - tamanho, 10)
-    posicaocobra_y = randrange(0, altura - tamanho, 10)
+    posicaocobra_y = randrange(0, altura - tamanho - placar, 10)
     posicaoaple_x = randrange(0, altura - tamanho, 10)
-    posicaoaple_y = randrange(0, altura - tamanho, 10)
+    posicaoaple_y = randrange(0, altura - tamanho - placar, 10)
     velocidade_x = 0
     velocidade_y = 0
-    correr_x = +1
-    correr_y = +1
+#   correr_x = +1
+#   correr_y = +1
     cobraXY = []
     comprimenrodacobra = 1
+    pontos = 0
 
     while sair:
         while fimdejogo:
             fundo.fill(branco)
-            texo("Game Over, Tecle C para continuar ou Tecle S para sair", verde)
+            texo("Game Over, Tecle C para continuar ou Tecle S para sair",
+                 verde, 25, largura/10, altura/2)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -67,13 +70,14 @@ def jogo():
                         sair = True
                         fimdejogo = False
                         posicaocobra_x = randrange(0, largura - tamanho, 10)
-                        posicaocobra_y = randrange(0, altura - tamanho, 10)
+                        posicaocobra_y = randrange(0, altura - tamanho - placar, 10)
                         posicaoaple_x = randrange(0, altura - tamanho, 10)
-                        posicaoaple_y = randrange(0, altura - tamanho, 10)
+                        posicaoaple_y = randrange(0, altura - tamanho - placar, 10)
                         velocidade_x = 0
                         velocidade_y = 0
                         cobraXY = []
                         comprimenrodacobra = 1
+                        pontos = 0
                     if event.key == pygame.K_s:
                         sair = False
                         fimdejogo = False
@@ -107,23 +111,24 @@ def jogo():
             se cruzam o objeto maçan some e outro aparece em outra posição"""
             if posicaocobra_x == posicaoaple_x and posicaocobra_y == posicaoaple_y:
                 posicaoaple_x = randrange(0, altura - tamanho, 10)
-                posicaoaple_y = randrange(0, altura - tamanho, 10)
+                posicaoaple_y = randrange(0, altura - tamanho - placar, 10)
                 comprimenrodacobra += 1
+                pontos += 1
 
-            if posicaocobra_x > largura:
+            if posicaocobra_x + tamanho > largura:
                 posicaocobra_x = 0
             if posicaocobra_x < 0:
                 posicaocobra_x = largura - tamanho
-            if posicaocobra_y > altura:
+            if posicaocobra_y + tamanho > altura-placar:
                 posicaocobra_y = 0
             if posicaocobra_y < 0:
-                posicaocobra_y = altura - tamanho
+                posicaocobra_y = altura - tamanho - placar
 
-        #    if posicaocobra_x > largura:
+        #    if posicaocobra_x  + tamanho > largura:
         #        sair = False
         #    if posicaocobra_x < 0:
         #        sair = False
-        #    if posicaocobra_y > altura:
+        #    if posicaocobra_y + tamanho > altura:
         #        sair = False
         #    if posicaocobra_y < 0:
         #        sair = False
@@ -142,8 +147,9 @@ def jogo():
         if any(Bloco == cobrainicio for Bloco in cobraXY[:-1]):
             fimdejogo = True
 
+        pygame.draw.rect(fundo, preto, [0, altura-placar, largura, placar])
+        texo("Pontuação:" + str(pontos), branco, 20, 10, altura-30)
         cobra(cobraXY)
-
         aple(posicaoaple_x, posicaoaple_y)
         #   print(event)
         #   impressao dos eventos que acontece no jogo
