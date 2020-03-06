@@ -56,10 +56,6 @@ def jogo():
 
     while sair:
         while fimdejogo:
-            fundo.fill(branco)
-            texo("Game Over, Tecle C para continuar ou Tecle S para sair",
-                 verde, 25, largura/10, altura/2)
-            pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sair = False
@@ -81,6 +77,35 @@ def jogo():
                     if event.key == pygame.K_s:
                         sair = False
                         fimdejogo = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    if x > 175 and y > 120 and x < 325 and y < 147:
+                        sair = True
+                        fimdejogo = False
+                        posicaocobra_x = randrange(0, largura - tamanho, 10)
+                        posicaocobra_y = randrange(0, altura - tamanho - placar, 10)
+                        posicaoaple_x = randrange(0, altura - tamanho, 10)
+                        posicaoaple_y = randrange(0, altura - tamanho - placar, 10)
+                        velocidade_x = 0
+                        velocidade_y = 0
+                        cobraXY = []
+                        comprimenrodacobra = 1
+                        pontos = 0
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x = pygame.mouse.get_pos()[0]
+                    y = pygame.mouse.get_pos()[1]
+                    if x > 360 and y > 120 and x < 450 and y < 147:
+                        sair = False
+                        fimdejogo = False
+            fundo.fill(branco)
+            texo("Game Over", verde, 50, 200, 30)
+            texo("Pontuação Final: " + str(pontos), preto, 30, 200, 80)
+            pygame.draw.rect(fundo, preto, [175, 120, 150, 27])
+            texo("Continuar(C)", branco, 30, 175, 125)
+            pygame.draw.rect(fundo, preto, [360, 120, 90, 27])
+            texo("Sair(S)", branco, 30, 360, 125)
+            pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
